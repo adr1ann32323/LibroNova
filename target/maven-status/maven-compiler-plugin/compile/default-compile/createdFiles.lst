@@ -1,0 +1,6 @@
+com/simulacro/app/errors/BadRequestException.class
+com/simulacro/app/errors/DataAccessException.class
+com/simulacro/app/errors/ServiceException.class
+com/simulacro/app/errors/ConflictException.class
+com/simulacro/app/errors/NotFoundException.class
+com/simulacro/app/config/DBconfig.class
