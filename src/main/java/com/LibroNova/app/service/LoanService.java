@@ -34,24 +34,24 @@ public class LoanService {
             loanDao.create(loan);
 
             conn.commit();
-            log("✅ Préstamo creado correctamente: " + loan);
+            log("Préstamo creado correctamente: " + loan);
 
         } catch (Exception e) {
             if (conn != null) {
                 try {
-                    conn.rollback(); // 🔄 Revertir cambios si algo falla
-                    log("⚠️ Rollback ejecutado por error en registro de préstamo");
+                    conn.rollback(); // Revertir cambios si algo falla
+                    log("Rollback ejecutado por error en registro de préstamo");
                 } catch (SQLException rollbackEx) {
-                    log("❌ Error al hacer rollback: " + rollbackEx.getMessage());
+                    log("Error al hacer rollback: " + rollbackEx.getMessage());
                 }
             }
-            log("❌ Error registrando préstamo: " + e.getMessage());
+            log("Error registrando préstamo: " + e.getMessage());
             throw new DataAccessException("Error en transacción de préstamo", e);
         } finally {
             if (conn != null) {
                 try {
                     conn.setAutoCommit(true);
-                    conn.close(); // ✅ Cierre manual de conexión
+                    conn.close(); // Cierre manual de conexión
                 } catch (SQLException closeEx) {
                     log("Error al cerrar conexión: " + closeEx.getMessage());
                 }
@@ -66,6 +66,7 @@ public class LoanService {
             conn.setAutoCommit(false);
 
             Loan loan = loanDao.findById(loanId);
+            System.out.println(loan);
             if (loan == null)
                 throw new DataAccessException("Préstamo no encontrado");
 
@@ -75,7 +76,7 @@ public class LoanService {
             double fine = 0.0;
             if (today.isAfter(due)) {
                 long daysLate = java.time.temporal.ChronoUnit.DAYS.between(due, today);
-                fine = daysLate * 1000;
+                fine = daysLate * 100;
                 loan.setStatus("LATE");
             } else {
                 loan.setStatus("RETURNED");
@@ -88,18 +89,18 @@ public class LoanService {
             bookDao.updateStock(loan.getBookId(), getNewStock(conn, loan.getBookId(), +1));
 
             conn.commit();
-            log("✅ Devolución procesada correctamente: " + loan);
+            log("Devolución procesada correctamente: " + loan);
 
         } catch (Exception e) {
             if (conn != null) {
                 try {
                     conn.rollback();
-                    log("⚠️ Rollback ejecutado por error en devolución");
+                    log("Rollback ejecutado por error en devolución");
                 } catch (SQLException rollbackEx) {
-                    log("❌ Error al hacer rollback: " + rollbackEx.getMessage());
+                    log("Error al hacer rollback: " + rollbackEx.getMessage());
                 }
             }
-            log("❌ Error procesando devolución: " + e.getMessage());
+            log("Error procesando devolución: " + e.getMessage());
             throw new DataAccessException("Error en transacción de devolución", e);
         } finally {
             if (conn != null) {

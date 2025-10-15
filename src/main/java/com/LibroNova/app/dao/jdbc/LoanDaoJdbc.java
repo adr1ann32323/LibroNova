@@ -1,20 +1,24 @@
 package com.LibroNova.app.dao.jdbc;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.LibroNova.app.config.DBconfig;
 import com.LibroNova.app.dao.ILoanDao;
 import com.LibroNova.app.domain.Loan;
 import com.LibroNova.app.errors.DataAccessException;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class LoanDaoJdbc implements ILoanDao {
 
     @Override
     public void create(Loan loan) throws DataAccessException {
         Loan newLoan = loan;
-        String sql = "INSERT INTO loan (id_user, id_book, loan_date, due_date, status, fine) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO loan (id_user, id_book, loan_date, due_date) VALUES (?, ?, ?, ?)";
         try (Connection conn = DBconfig.connect();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -22,8 +26,6 @@ public class LoanDaoJdbc implements ILoanDao {
             ps.setInt(2, loan.getBookId());
             ps.setDate(3, new java.sql.Date(loan.getLoanDate().getTime()));
             ps.setDate(4, new java.sql.Date(loan.getReturnDate().getTime())); // due_date
-            ps.setString(5, loan.getStatus());
-            ps.setDouble(6, loan.getFine());
             ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();

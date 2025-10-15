@@ -1,19 +1,23 @@
 package com.LibroNova.app.controller;
 
-import com.LibroNova.app.domain.User;
-import com.LibroNova.app.errors.*;
-import com.LibroNova.app.errors.*;
-import com.LibroNova.app.service.UserService;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.LibroNova.app.domain.User;
+import com.LibroNova.app.errors.BadRequestException;
+import com.LibroNova.app.errors.ConflictException;
+import com.LibroNova.app.errors.DataAccessException;
+import com.LibroNova.app.errors.NotFoundException;
+import com.LibroNova.app.errors.ServiceException;
+import com.LibroNova.app.errors.UnauthorizedException;
+// import com.LibroNova.app.service.UserService;
+import com.LibroNova.app.service.IUserService;
 public class UserController {
 
-    private final UserService service;
+    private final IUserService service;
 
-    public UserController(UserService service) {
+    public UserController(IUserService service) {
         this.service = service;
     }
 
@@ -123,7 +127,38 @@ public class UserController {
 
         return response;
     }
+    
+    // =====================================================
+    // ACTUALIZAR ESTADO ACTIVO/INACTIVO
+    public Map<String, Object> updateUserStatus(int idUser, boolean active) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            boolean ok = service.updateUserStatus(idUser, active);
+            response.put("status", 200);
+            response.put("data", ok);
 
+        } catch (BadRequestException e) {
+            response.put("status", 400);
+            response.put("error", e.getMessage());
+
+        } catch (NotFoundException e) {
+            response.put("status", 404);
+            response.put("error", e.getMessage());
+
+        } catch (ServiceException e) {
+            response.put("status", 500);
+            response.put("error", "Error interno del servidor: " + e.getMessage());
+
+        } catch (DataAccessException e) {
+            response.put("status", 500);
+            response.put("error", "Error de acceso a datos: " + e.getMessage());
+
+        } finally {
+            System.out.println("→ Operación finalizada");
+        }
+    
+        return response;
+    };
     // =====================================================
     // LOGIN
     // =====================================================

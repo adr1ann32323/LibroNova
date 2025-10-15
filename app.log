@@ -1,3 +1,16 @@
 2025-10-14T12:16:41.816163197 - Error procesando devolución: Prestamo no encontrado
 2025-10-14T12:16:57.615901282 - Error procesando devolución: Cannot invoke "java.sql.Date.toLocalDate()" because the return value of "domain.com.LibroNova.app.Loan.getReturnDate()" is null
 2025-10-14T12:17:25.081992815 - Prestamo creado correctamente: Préstamo #3 | Usuario: 1 | Libro: 2 | Estado: ACTIVE | Multa: $0.0
+2025-10-14T18:37:35.987576593 - ✅ Préstamo creado correctamente: Préstamo #3 | Usuario: 3 | Libro: 5 | Estado: ACTIVE | Multa: $0.0 | Fecha de préstamo: 2025-10-14 | Fecha de devolución: 2025-10-21
+2025-10-14T18:38:19.643517843 - ⚠️ Rollback ejecutado por error en devolución
+2025-10-14T18:38:19.644484025 - ❌ Error procesando devolución: Cannot invoke "java.sql.Date.toLocalDate()" because the return value of "com.LibroNova.app.domain.Loan.getReturnDate()" is null
+2025-10-14T18:46:46.626247061 - Rollback ejecutado por error en devolución
+2025-10-14T18:46:46.627764744 - Error procesando devolución: Cannot invoke "java.sql.Date.toLocalDate()" because the return value of "com.LibroNova.app.domain.Loan.getReturnDate()" is null
+2025-10-14T18:55:15.257784245 - Rollback ejecutado por error en devolución
+2025-10-14T18:55:15.259317840 - Error procesando devolución: Cannot invoke "java.sql.Date.toLocalDate()" because the return value of "com.LibroNova.app.domain.Loan.getReturnDate()" is null
+2025-10-14T19:04:27.799114808 - Rollback ejecutado por error en devolución
+2025-10-14T19:04:27.800827224 - Error procesando devolución: Cannot invoke "java.sql.Date.toLocalDate()" because the return value of "com.LibroNova.app.domain.Loan.getReturnDate()" is null
+2025-10-14T19:20:28.408370623 - Rollback ejecutado por error en devolución
+2025-10-14T19:20:28.410064424 - Error procesando devolución: Préstamo no encontrado
+2025-10-14T19:20:41.877363696 - Rollback ejecutado por error en devolución
+2025-10-14T19:20:41.877902352 - Error procesando devolución: Cannot invoke "java.sql.Date.toLocalDate()" because the return value of "com.LibroNova.app.domain.Loan.getReturnDate()" is null

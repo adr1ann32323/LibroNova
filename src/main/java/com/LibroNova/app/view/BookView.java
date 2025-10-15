@@ -1,12 +1,13 @@
 package com.LibroNova.app.view;
 
-import com.LibroNova.app.controller.BookController;
-import com.LibroNova.app.domain.Book;
-
-import javax.swing.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.swing.JOptionPane;
+
+import com.LibroNova.app.controller.BookController;
+import com.LibroNova.app.domain.Book;
 
 public class BookView {
 
@@ -17,7 +18,7 @@ public class BookView {
     }
 
     public void showMenu() {
-        String[] options = {"Listar libros", "Crear libro", "Actualizar stock", "Salir"};
+        String[] options = {"Listar libros", "Crear libro", "Actualizar stock", "Buscar Libro por isbn" ,"Salir"};
         int choice;
 
         do {
@@ -36,6 +37,7 @@ public class BookView {
                 case 0 -> listBooks();
                 case 1 -> createBook();
                 case 2 -> updateStock();
+                case 3 -> findByIsbn();
             }
 
         } while (choice != 3 && choice != JOptionPane.CLOSED_OPTION);
@@ -55,16 +57,20 @@ public class BookView {
     }
 
     private void createBook() {
+        String isbn = JOptionPane.showInputDialog("ISBN:");
         String title = JOptionPane.showInputDialog("Título:");
         String author = JOptionPane.showInputDialog("Autor:");
-        String isbn = JOptionPane.showInputDialog("ISBN:");
+        String category = JOptionPane.showInputDialog("Categoría:");
         String stockStr = JOptionPane.showInputDialog("Stock:");
+        String priceStr = JOptionPane.showInputDialog("Precio:");
 
         Map<String, String> data = new HashMap<>();
         data.put("title", title);
         data.put("author", author);
         data.put("isbn", isbn);
         data.put("stock", stockStr);
+        data.put("price", priceStr);
+        data.put("category", category);
 
         Map<String, Object> response = bookController.createBook(data);
 
@@ -92,6 +98,19 @@ public class BookView {
 
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Valores numéricos inválidos");
+        }
+    }
+
+    private void findByIsbn() {
+        String isbn = JOptionPane.showInputDialog("ISBN del libro:");
+
+        Map<String, Object> response = bookController.getBookByIsbn(isbn);
+
+        if ((int) response.get("status") == 200) {
+            Book book = (Book) response.get("data");
+            JOptionPane.showMessageDialog(null, "Libro encontrado:\n" + book);
+        } else {
+            JOptionPane.showMessageDialog(null, "Error: " + response.get("error"));
         }
     }
 }

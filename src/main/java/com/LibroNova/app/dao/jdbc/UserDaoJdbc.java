@@ -1,14 +1,18 @@
 package com.LibroNova.app.dao.jdbc;
 
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.LibroNova.app.config.DBconfig;
 import com.LibroNova.app.dao.IUserDao;
 import com.LibroNova.app.domain.User;
 import com.LibroNova.app.errors.DataAccessException;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class UserDaoJdbc implements IUserDao {
 
@@ -94,6 +98,28 @@ public class UserDaoJdbc implements IUserDao {
         }
 
         return users;
+    }
+
+    @Override
+    public User update(User user) throws DataAccessException {
+
+        String sql = "UPDATE user_account SET name = ?, email = ?, password = ?, role = ?, active = ? WHERE id_user = ?";
+        try (Connection conn = DBconfig.connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.setString(4, user.getRole());
+            ps.setBoolean(5, user.isActive());
+            ps.setInt(6, user.getId());
+
+            ps.executeUpdate();
+            return user;
+
+        } catch (SQLException e) {
+            throw new DataAccessException("Error al actualizar el usuario", e);
+        }
     }
 
     // =====================================================

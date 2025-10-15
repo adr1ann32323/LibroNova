@@ -1,12 +1,17 @@
 package com.LibroNova.app.service;
 
-import com.LibroNova.app.errors.*;
-import com.LibroNova.app.dao.IUserDao;
-import com.LibroNova.app.domain.User;
-
 import java.util.List;
 
-public class UserService {
+import com.LibroNova.app.dao.IUserDao;
+import com.LibroNova.app.domain.User;
+import com.LibroNova.app.errors.BadRequestException;
+import com.LibroNova.app.errors.ConflictException;
+import com.LibroNova.app.errors.DataAccessException;
+import com.LibroNova.app.errors.NotFoundException;
+import com.LibroNova.app.errors.ServiceException;
+import com.LibroNova.app.errors.UnauthorizedException;
+
+public class UserService implements IUserService {
 
     private final IUserDao userDao;
 
@@ -17,34 +22,38 @@ public class UserService {
     // =====================================================
     // CREAR USUARIO
     // =====================================================
-    public User createUser(User user) throws BadRequestException, ConflictException, ServiceException, DataAccessException {
-        // Validaciones básicas
+    public User createUser(User user)
+            throws BadRequestException, ConflictException, ServiceException, DataAccessException {
+
         if (user.getName() == null || user.getName().isBlank() ||
                 user.getEmail() == null || user.getEmail().isBlank() ||
                 user.getPassword() == null || user.getPassword().isBlank() ||
                 user.getRole() == null || user.getRole().isBlank()) {
-            throw new BadRequestException("Todos los campos son obligatorios");
+            throw new BadRequestException("Todos los campos son obligatorios.");
         }
 
-        // Verificar si ya existe un usuario con el mismo email
         try {
             User existing = userDao.findByEmail(user.getEmail());
             if (existing != null) {
-                throw new ConflictException("El correo ya está registrado");
+                throw new ConflictException("El correo ya está registrado.");
             }
 
+            // Por defecto, activar nuevo usuario
+            user.setActive(true);
             return userDao.create(user);
+
         } catch (DataAccessException dae) {
-            throw dae; // Propagar
+            throw dae;
         } catch (Exception e) {
-            throw new ServiceException("Error al crear el usuario", e);
+            throw new ServiceException("Error al crear el usuario.", e);
         }
     }
 
     // =====================================================
     // OBTENER USUARIO POR EMAIL
     // =====================================================
-    public User getUserByEmail(String email) throws NotFoundException, ServiceException, DataAccessException {
+    public User getUserByEmail(String email)
+            throws NotFoundException, ServiceException, DataAccessException {
         try {
             User user = userDao.findByEmail(email);
             if (user == null) {
@@ -54,14 +63,15 @@ public class UserService {
         } catch (DataAccessException dae) {
             throw dae;
         } catch (Exception e) {
-            throw new ServiceException("Error al obtener usuario por email", e);
+            throw new ServiceException("Error al obtener usuario por email.", e);
         }
     }
 
     // =====================================================
     // OBTENER USUARIO POR ID
     // =====================================================
-    public User getUserById(int id) throws NotFoundException, ServiceException, DataAccessException {
+    public User getUserById(int id)
+            throws NotFoundException, ServiceException, DataAccessException {
         try {
             User user = userDao.findById(id);
             if (user == null) {
@@ -71,51 +81,73 @@ public class UserService {
         } catch (DataAccessException dae) {
             throw dae;
         } catch (Exception e) {
-            throw new ServiceException("Error al obtener usuario por ID", e);
+            throw new ServiceException("Error al obtener usuario por ID.", e);
         }
     }
 
     // =====================================================
     // LISTAR TODOS LOS USUARIOS
     // =====================================================
-    public List<User> listUsers() throws ServiceException, DataAccessException {
+    public List<User> listUsers()
+            throws ServiceException, DataAccessException {
         try {
             return userDao.listAll();
         } catch (DataAccessException dae) {
             throw dae;
         } catch (Exception e) {
-            throw new ServiceException("Error al listar usuarios", e);
+            throw new ServiceException("Error al listar usuarios.", e);
         }
     }
 
     // =====================================================
-    // AUTENTICACIÓN SIMPLIFICADA
+    // LOGIN (con validación de estado y rol)
     // =====================================================
     public User login(String email, String password)
-        throws UnauthorizedException, ServiceException, DataAccessException {
-    try {
-        User user = userDao.findByEmail(email);
+            throws UnauthorizedException, ServiceException, DataAccessException {
+        try {
+            User user = userDao.findByEmail(email);
 
-        if (user == null || !user.getPassword().equals(password)) {
-            throw new UnauthorizedException("Correo o contraseña incorrectos");
+            if (user == null || !user.getPassword().equals(password)) {
+                throw new UnauthorizedException("Correo o contraseña incorrectos.");
+            }
+
+            if (!user.isActive()) {
+                throw new UnauthorizedException("Usuario inactivo.");
+            }
+
+            return user;
+
+        } catch (UnauthorizedException e) {
+            throw e;
+
+        } catch (DataAccessException dae) {
+            throw dae;
+
+        } catch (Exception e) {
+            throw new ServiceException("Error interno al autenticar usuario.", e);
         }
-
-        if (!user.isActive()) {
-            throw new UnauthorizedException("Usuario inactivo");
-        }
-
-        return user;
-
-    } catch (UnauthorizedException e) {
-        throw e;
-
-    } catch (DataAccessException dae) {
-        throw dae;
-
-    } catch (Exception e) {
-        throw new ServiceException("Error interno al acceder a los datos en Login.", e);
     }
-}
 
+    // =====================================================
+    // CAMBIAR ESTADO (ACTIVO/INACTIVO)
+    // =====================================================
+    public boolean updateUserStatus(int userId, boolean active)
+            throws NotFoundException, ServiceException, DataAccessException {
+        try {
+            User user = userDao.findById(userId);
+            if (user == null) {
+                throw new NotFoundException("Usuario no encontrado con ID: " + userId);
+            }
+
+            user.setActive(active);
+            userDao.update(user);
+            return true;
+
+        } catch (DataAccessException dae) {
+            throw dae;
+        } catch (Exception e) {
+            throw new ServiceException("Error al actualizar el estado del usuario.", e);
+        }
+    }
 
 }

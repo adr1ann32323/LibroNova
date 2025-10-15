@@ -10,5 +10,6 @@ public interface IUserDao {
     User findByEmail(String email) throws DataAccessException;
     User findById(int id) throws DataAccessException;
     List<User> listAll() throws DataAccessException;
+    User update(User user) throws DataAccessException;
 }
 

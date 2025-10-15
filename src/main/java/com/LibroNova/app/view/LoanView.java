@@ -27,14 +27,14 @@ public class LoanView {
             return;
         }
 
-        if ("STAFF".equalsIgnoreCase(currentUser.getRole())) {
-            showStaffMenu();
+        if ("ADMIN".equalsIgnoreCase(currentUser.getRole()) || "ASSISTENT".equalsIgnoreCase(currentUser.getRole())) {
+            showAdminMenu();
         } else {
             showMemberMenu(currentUser);
         }
     }
 
-    private void showStaffMenu() {
+    private void showAdminMenu() {
         String[] options = { "Registrar préstamo", "Registrar devolución", "Listar todos los préstamos", "Volver" };
         int choice;
         do {
@@ -57,7 +57,7 @@ public class LoanView {
     }
 
     private void showMemberMenu(User currentUser) {
-        String[] options = { "Ver mis préstamos", "Volver" };
+        String[] options = { "Ver mis prestamos", "Volver" };
         int choice;
         do {
             choice = JOptionPane.showOptionDialog(

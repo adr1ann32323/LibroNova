@@ -1,10 +1,14 @@
 package com.LibroNova.app.service;
 
-import com.LibroNova.app.errors.*;
+import java.util.List;
+
 import com.LibroNova.app.dao.IBookDao;
 import com.LibroNova.app.domain.Book;
-
-import java.util.List;
+import com.LibroNova.app.errors.BadRequestException;
+import com.LibroNova.app.errors.ConflictException;
+import com.LibroNova.app.errors.DataAccessException;
+import com.LibroNova.app.errors.NotFoundException;
+import com.LibroNova.app.errors.ServiceException;
 
 public class BookService {
 
@@ -16,9 +20,17 @@ public class BookService {
 
     // Crear libro con validación ISBN único
     public Book createBook(Book book) throws BadRequestException, ConflictException, ServiceException, DataAccessException {
-        if (book.getTitle() == null || book.getTitle().isBlank() || book.getIsbn() == null || book.getIsbn().isBlank()) {
-            throw new BadRequestException("Título o ISBN inválido");
+        if (book.getTitle() == null || book.getTitle().isBlank() || book.getIsbn() == null || book.getIsbn().isBlank() || book.getCategory() == null || book.getCategory().isBlank()) {
+            throw new BadRequestException("Título, ISBN y categoría son obligatorios");
         }
+
+        if (book.getStock() < 0) {
+            throw new BadRequestException("El stock no puede ser negativo");
+        };
+
+        if (book.getPrice() < 0) {
+            throw new BadRequestException("El precio no puede ser negativo");
+        };
 
         Book existing = bookDao.findByIsbn(book.getIsbn());
         if (existing != null) {

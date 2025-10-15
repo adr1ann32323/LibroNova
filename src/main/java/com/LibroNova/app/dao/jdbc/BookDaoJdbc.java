@@ -13,18 +13,21 @@ public class BookDaoJdbc implements IBookDao {
 
     @Override
     public Book create(Book book) throws DataAccessException {
-        String sql = "INSERT INTO book (isbn, title, author, publisher, year, copies, available_copies) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO book (isbn, title, author, category, publisher, year, total_copies, available_copies, reference_price, is_active) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBconfig.connect();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, book.getIsbn());
             ps.setString(2, book.getTitle());
             ps.setString(3, book.getAuthor());
-            ps.setString(4, null); // publisher opcional
-            ps.setInt(5, 0); // year opcional
-            ps.setInt(6, book.getStock());
-            ps.setInt(7, book.getStock());
+            ps.setString(4, book.getCategory());
+            ps.setString(5, book.getPublisher());
+            ps.setInt(6, book.getYear());
+            ps.setInt(7, book.getStock());            // total_copies
+            ps.setInt(8, book.getStock());            // available_copies
+            ps.setDouble(9, book.getPrice()); // reference_price
+            ps.setBoolean(10, book.isAvailable());        // is_active
 
             ps.executeUpdate();
 
@@ -64,7 +67,7 @@ public class BookDaoJdbc implements IBookDao {
 
     @Override
     public List<Book> listAll() throws DataAccessException {
-        String sql = "SELECT * FROM book ORDER BY created_at DESC";
+        String sql = "SELECT * FROM book ORDER BY id_book";
         List<Book> books = new ArrayList<>();
 
         try (Connection conn = DBconfig.connect();
@@ -84,7 +87,7 @@ public class BookDaoJdbc implements IBookDao {
 
     @Override
     public boolean updateStock(int idBook, int newStock) throws DataAccessException {
-        String sql = "UPDATE book SET copies = ?, available_copies = ? WHERE id_book = ?";
+        String sql = "UPDATE book SET total_copies = ?, available_copies = ? WHERE id_book = ?";
         try (Connection conn = DBconfig.connect();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -101,7 +104,7 @@ public class BookDaoJdbc implements IBookDao {
     }
 
     // =================================
-    // Método auxiliar
+    // Méetodo privado para mapear ResultSet a Book
     // =================================
     private Book mapResultSetToBook(ResultSet rs) throws SQLException {
         Book book = new Book();
@@ -109,8 +112,12 @@ public class BookDaoJdbc implements IBookDao {
         book.setIsbn(rs.getString("isbn"));
         book.setTitle(rs.getString("title"));
         book.setAuthor(rs.getString("author"));
-        book.setStock(rs.getInt("copies"));
+        book.setCategory(rs.getString("category"));
+        book.setPublisher(rs.getString("publisher"));
+        book.setYear(rs.getInt("year"));
+        book.setStock(rs.getInt("total_copies"));
         book.setAvailable(rs.getInt("available_copies") > 0);
+        book.setPrice(rs.getDouble("reference_price"));
         book.setCreatedAt(rs.getTimestamp("created_at"));
         return book;
     }

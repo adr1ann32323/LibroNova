@@ -35,7 +35,7 @@ public class UserView {
             switch (choice) {
                 case 0 -> listUsers();
                 case 1 -> createUser();
-                //case 2 -> updateUserStatus();
+                case 2 -> updateUserStatus();
             }
 
         } while (choice != 3 && choice != JOptionPane.CLOSED_OPTION);
@@ -86,7 +86,7 @@ public class UserView {
     // ----------------------------------------
     // Actualizar el estado activo/inactivo
     // ----------------------------------------
-    /*
+    
     private void updateUserStatus() {
         String idStr = JOptionPane.showInputDialog("ID del usuario:");
         String activeStr = JOptionPane.showInputDialog("Activo? (true/false):");
@@ -106,5 +106,5 @@ public class UserView {
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "ID inválido");
         }
-    }*/
+    }
 }

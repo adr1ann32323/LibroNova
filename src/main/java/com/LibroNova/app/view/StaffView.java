@@ -25,7 +25,7 @@ public class StaffView {
             return;
         }
 
-        String[] options = {"Gestionar préstamos", "Gestionar libros", "Gestionar usuarios", "Gestionar incidentes", "Salir"};
+        String[] options = {"Gestionar préstamos", "Gestionar libros", "Gestionar usuarios", "Salir"};
         int choice;
 
         do {
@@ -44,10 +44,9 @@ public class StaffView {
                 case 0 -> manageLoans();
                 case 1 -> manageBooks();
                 case 2 -> manageUsers();
-                case 3 -> manageIncidents();
             }
 
-        } while (choice != 4 && choice != JOptionPane.CLOSED_OPTION);
+        } while (choice != 3 && choice != JOptionPane.CLOSED_OPTION);
     }
 
     private void manageLoans() {
@@ -62,7 +61,5 @@ public class StaffView {
         userView.showMenu();
     }
 
-    private void manageIncidents() {
-        JOptionPane.showMessageDialog(null, "Función gestionar incidentes aún no implementada");
-    }
+
 }
