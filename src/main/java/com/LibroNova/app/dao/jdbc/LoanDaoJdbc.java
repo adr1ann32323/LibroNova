@@ -129,6 +129,7 @@ public class LoanDaoJdbc implements ILoanDao {
         loan.setUserId(rs.getInt("id_user"));
         loan.setBookId(rs.getInt("id_book"));
         loan.setLoanDate(rs.getDate("loan_date"));
+        loan.setDueDate(rs.getDate("due_date"));
         loan.setReturnDate(rs.getDate("return_date"));
         loan.setStatus(rs.getString("status"));
         loan.setFine(rs.getDouble("fine"));

@@ -40,7 +40,7 @@ public class BookView {
                 case 3 -> findByIsbn();
             }
 
-        } while (choice != 3 && choice != JOptionPane.CLOSED_OPTION);
+        } while (choice != 4 && choice != JOptionPane.CLOSED_OPTION);
     }
 
     private void listBooks() {

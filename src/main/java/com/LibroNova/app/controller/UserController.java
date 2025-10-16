@@ -66,7 +66,7 @@ public class UserController {
             response.put("error", "Error de acceso a datos: " + e.getMessage());
 
         } finally {
-            System.out.println("→ Operación finalizada"); // visible (requisito)
+            System.out.println("→ Operación finalizada" + response.get("status")); // visible (requisito)
         }
 
         return response;
@@ -96,7 +96,7 @@ public class UserController {
             response.put("error", "Error de acceso a datos: " + e.getMessage());
 
         } finally {
-            System.out.println("→ Operación finalizada");
+            System.out.println("→ Operación finalizada"+ response.get("status"));
         }
 
         return response;
@@ -122,7 +122,7 @@ public class UserController {
             response.put("error", "Error de acceso a datos: " + e.getMessage());
 
         } finally {
-            System.out.println("→ Operación finalizada");
+            System.out.println("→ Operación finalizada"+ response.get("status"));
         }
 
         return response;
@@ -154,7 +154,7 @@ public class UserController {
             response.put("error", "Error de acceso a datos: " + e.getMessage());
 
         } finally {
-            System.out.println("→ Operación finalizada");
+            System.out.println("→ Operación finalizada"+ response.get("status"));
         }
     
         return response;
@@ -186,7 +186,7 @@ public class UserController {
             response.put("error", "Error de acceso a datos: " + e.getMessage());
 
         } finally {
-            System.out.println("→ Operación finalizada");
+            System.out.println("→ Operación finalizada"+ response.get("status"));
         }
 
         return response;

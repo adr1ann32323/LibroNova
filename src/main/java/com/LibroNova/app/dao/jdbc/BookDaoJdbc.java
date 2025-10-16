@@ -24,10 +24,10 @@ public class BookDaoJdbc implements IBookDao {
             ps.setString(4, book.getCategory());
             ps.setString(5, book.getPublisher());
             ps.setInt(6, book.getYear());
-            ps.setInt(7, book.getStock());            // total_copies
-            ps.setInt(8, book.getStock());            // available_copies
-            ps.setDouble(9, book.getPrice()); // reference_price
-            ps.setBoolean(10, book.isAvailable());        // is_active
+            ps.setInt(7, book.getStock());
+            ps.setInt(8, book.getStock());
+            ps.setDouble(9, book.getPrice());
+            ps.setBoolean(10, book.isAvailable());
 
             ps.executeUpdate();
 

@@ -9,6 +9,7 @@ public class Loan {
     private int userId;
     private int bookId;
     private Date loanDate;
+    private Date dueDate;
     private Date returnDate;
     private String status; // ACTIVE, RETURNED, LATE
     private double fine;
@@ -56,6 +57,14 @@ public class Loan {
 
     public Timestamp getCreatedAt() { return createdAt; }
     public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
+
+    public Date getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
+    }
 
     @Override
     public String toString() {

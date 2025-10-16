@@ -14,3 +14,17 @@
 2025-10-14T19:20:28.410064424 - Error procesando devolución: Préstamo no encontrado
 2025-10-14T19:20:41.877363696 - Rollback ejecutado por error en devolución
 2025-10-14T19:20:41.877902352 - Error procesando devolución: Cannot invoke "java.sql.Date.toLocalDate()" because the return value of "com.LibroNova.app.domain.Loan.getReturnDate()" is null
+2025-10-15T17:41:20.680934873 - Rollback ejecutado por error en devolución
+2025-10-15T17:41:20.682875164 - Error procesando devolución: Préstamo no encontrado
+2025-10-15T18:01:46.430854562 - Rollback ejecutado por error en devolución
+2025-10-15T18:01:46.432452251 - Error procesando devolución: Préstamo no encontrado
+2025-10-15T18:02:14.135915603 - Devolución procesada correctamente: Préstamo #3 | Usuario: 3 | Libro: 5 | Estado: RETURNED | Multa: $0.0 | Fecha de préstamo: 2025-10-14 | Fecha de devolución: 2025-10-15
+2025-10-15T19:24:51.166118111 - Préstamo creado correctamente: Préstamo #4 | Usuario: 4 | Libro: 5 | Estado: ACTIVE | Multa: $0.0 | Fecha de préstamo: 2025-10-15 | Fecha de devolución: 2025-10-22
+2025-10-15T19:26:23.709571402 - Préstamo creado correctamente: Préstamo #5 | Usuario: 3 | Libro: 5 | Estado: ACTIVE | Multa: $0.0 | Fecha de préstamo: 2025-10-15 | Fecha de devolución: 2025-10-22
+2025-10-15T19:47:02.110011438 - Rollback ejecutado por error en registro de préstamo
+2025-10-15T19:47:02.110597794 - Error registrando préstamo: Error al crear préstamo
+2025-10-15T19:47:20.063388517 - Préstamo creado correctamente: Préstamo #7 | Usuario: 3 | Libro: 5 | Estado: ACTIVE | Multa: $0.0 | Fecha de préstamo: 2025-10-15 | Fecha de devolución: 2025-10-22
+2025-10-15T19:51:36.895399333 - Devolución procesada correctamente: Préstamo #7 | Usuario: 3 | Libro: 5 | Estado: RETURNED | Multa: $0.0 | Fecha de préstamo: 2025-10-15 | Fecha de devolución: 2025-10-15
+2025-10-15T20:37:00.988054281 - Rollback ejecutado por error en registro de préstamo
+2025-10-15T20:37:00.989490319 - Error registrando préstamo: Libro no encontrado
+2025-10-15T20:37:37.297764363 - Préstamo creado correctamente: Préstamo #8 | Usuario: 5 | Libro: 6 | Estado: ACTIVE | Multa: $0.0 | Fecha de préstamo: 2025-10-15 | Fecha de devolución: 2025-10-22

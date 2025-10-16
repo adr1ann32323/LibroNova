@@ -29,6 +29,10 @@ public class LoanService {
             conn = DBconfig.connect();
             conn.setAutoCommit(false);
 
+            int available = getNewStock(conn, loan.getBookId(), 0);
+            if (available <= 0)
+                throw new DataAccessException("No hay copias disponibles para el libro ID: " + loan.getBookId());
+
             // Actualizar stock y crear préstamo
             bookDao.updateStock(loan.getBookId(), getNewStock(conn, loan.getBookId(), -1));
             loanDao.create(loan);
@@ -66,17 +70,16 @@ public class LoanService {
             conn.setAutoCommit(false);
 
             Loan loan = loanDao.findById(loanId);
-            System.out.println(loan);
             if (loan == null)
                 throw new DataAccessException("Préstamo no encontrado");
 
-            LocalDate due = loan.getReturnDate().toLocalDate();
+            LocalDate due = loan.getDueDate().toLocalDate();
             LocalDate today = LocalDate.now();
 
             double fine = 0.0;
             if (today.isAfter(due)) {
                 long daysLate = java.time.temporal.ChronoUnit.DAYS.between(due, today);
-                fine = daysLate * 100;
+                fine = daysLate * 1500;
                 loan.setStatus("LATE");
             } else {
                 loan.setStatus("RETURNED");
